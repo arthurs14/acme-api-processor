@@ -9,11 +9,16 @@ const loadData = async () => {
   const [ companies, products, offerings ] = responses.map(response => response.data);
 
   // return products within a price range
-  // const productsInPriceRange = findProductsInPriceRange(products, { min: 1, max: 15 });
-  // console.log(productsInPriceRange);
+  const productsInPriceRange = findProductsInPriceRange(products, { min: 1, max: 15 });
+  //console.log(productsInPriceRange);
 
   // returns object where key is first letter of company name
   // value for each key is the array of those companies
+  const groupedCompaniesByLetter = groupCompaniesByLetter(companies);
+  //console.log(groupedCompaniesByLetter);
+
+  // Returns object where key is a state
+  // value for each key is the array of those companies in that state
   const groupedCompaniesByState = groupCompaniesByState(companies);
   console.log(groupedCompaniesByState);
 };
@@ -26,8 +31,8 @@ const findProductsInPriceRange = (products, range) => {
   });
 };
 
-const groupCompaniesByState = (companies) => {
-  return test = companies.reduce((obj, current) => {
+const groupCompaniesByLetter = (companies) => {
+  return groupedCompaniesByLetter = companies.reduce((obj, current) => {
     const key = current.name.charAt(0);
     const companies = [];
     if(key in obj) {
@@ -41,5 +46,19 @@ const groupCompaniesByState = (companies) => {
   }, {})
 };
 
+const groupCompaniesByState = (companies) => {
+  return groupedCompaniesByState = companies.reduce((obj, current) => {
+    const key = current.state;
+    const states = [];
+    if(key in obj) {
+      const temp = obj[key];
+      temp.push(current.name);
+    } else {
+      states.push(current.name);
+      obj[key] = states;
+    }
+    return obj;
+  }, {});
+};
 
 loadData();
