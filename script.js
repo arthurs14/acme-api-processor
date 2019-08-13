@@ -20,7 +20,17 @@ const loadData = async () => {
   // Returns object where key is a state
   // value for each key is the array of those companies in that state
   const groupedCompaniesByState = groupCompaniesByState(companies);
-  console.log(groupedCompaniesByState);
+  // console.log(groupedCompaniesByState);
+
+  // Return an array of the offerings with each offering having a
+  // company and a product
+  const processedOfferings = processOfferings({companies, products, offerings});
+  //console.log(processedOfferings);
+
+  // Returns the companies that have n or more offerings
+  const threeOrMoreOfferings = companiesByNumberOfOfferings(companies, offerings, 3);
+  console.log(threeOrMoreOfferings);
+
 };
 
 const findProductsInPriceRange = (products, range) => {
@@ -59,6 +69,18 @@ const groupCompaniesByState = (companies) => {
     }
     return obj;
   }, {});
+};
+
+const processOfferings = (obj) => {
+  return processedOfferings = obj.offerings.map(offering => {
+    const companies = obj.companies.find(company => {
+      return company.id === offering.companyId;
+    })
+    const products = obj.products.find(product => {
+      return product.id === offering.productId;
+    })
+    return {...offering, company: companies, product: products};
+  });
 };
 
 loadData();
