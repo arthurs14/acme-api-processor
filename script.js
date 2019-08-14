@@ -10,27 +10,31 @@ const loadData = async () => {
 
   // return products within a price range
   const productsInPriceRange = findProductsInPriceRange(products, { min: 1, max: 15 });
-  //console.log(productsInPriceRange);
+  console.log(productsInPriceRange);
 
   // returns object where key is first letter of company name
   // value for each key is the array of those companies
   const groupedCompaniesByLetter = groupCompaniesByLetter(companies);
-  //console.log(groupedCompaniesByLetter);
+  console.log(groupedCompaniesByLetter);
 
   // Returns object where key is a state
   // value for each key is the array of those companies in that state
   const groupedCompaniesByState = groupCompaniesByState(companies);
-  // console.log(groupedCompaniesByState);
+  console.log(groupedCompaniesByState);
 
   // Return an array of the offerings with each offering having a
   // company and a product
   const processedOfferings = processOfferings({companies, products, offerings});
-  //console.log(processedOfferings);
+  console.log(processedOfferings);
 
   // Returns the companies that have n or more offerings
   const threeOrMoreOfferings = companiesByNumberOfOfferings(companies, offerings, 3);
   console.log(threeOrMoreOfferings);
 
+  // Returns array of products where each product has the average
+  // price of it's offerings
+  const processedProducts = processProducts({ products, offerings });
+  console.log(processedProducts);
 };
 
 const findProductsInPriceRange = (products, range) => {
@@ -94,6 +98,22 @@ const companiesByNumberOfOfferings = (companies, offerings, number) => {
     return _company.offers.length >= 3;
   })
   return threeOrMoreOfferings;
-}
+;}
+
+const processProducts = (obj) => {
+  const products = obj.products.map(product => {
+    const offers = obj.offerings.filter(offer => {
+      return product.id === offer.productId;
+    });
+    const length = offers.length;
+    const offerings = offers.reduce((acc, curr) => {
+      acc += curr.price;
+      return acc;
+    }, 0)
+    const avgPriceRounded = (offerings / length).toFixed(2);
+    return { ...product, avgPrice: avgPriceRounded}
+  })
+  return products;
+};
 
 loadData();
