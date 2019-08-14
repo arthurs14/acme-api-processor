@@ -83,4 +83,17 @@ const processOfferings = (obj) => {
   });
 };
 
+const companiesByNumberOfOfferings = (companies, offerings, number) => {
+  const company = companies.map(_company => {
+    const offers = offerings.filter(offer => {
+      return offer.companyId === _company.id;
+    })
+    return {..._company, offers: offers};
+  })
+  const threeOrMoreOfferings = company.filter(_company => {
+    return _company.offers.length >= 3;
+  })
+  return threeOrMoreOfferings;
+}
+
 loadData();
